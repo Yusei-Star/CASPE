@@ -25,13 +25,7 @@ mkdir CASPE
 tar -xzvf CASPE_env.tar.gz -C /anaconda3/envs/CASPE
 ```
 
-```### Download Pre-trained Models
 
-You can download the pre-trained models from the following links:
-
-```bash
-
-```
 ### Dependencies
 
 Core requirements:
@@ -40,6 +34,7 @@ Core requirements:
 * PyTorch 2.4.1
 * Biopython
 * [Other specific bioinformatics libraries]
+* Linux only (requires .so shared libraries)
 
 ### Using Pre-trained Models
 
