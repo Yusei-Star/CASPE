@@ -17,7 +17,7 @@ The relationship between protein sequence and its properties remains unknown.We 
 conda env create -f CASPE.yaml
 ```
 
-Option 2：Or you can download the environment tar (CASPE_env.tar.gz) and create the environment manually. (https://zenodo.org/api/records/17851145)
+Option 2：Or you can download the environment tar (CASPE_env.tar.gz) and create the environment manually. (https://zenodo.org/records/17982688)
 
 ```
 cd /anaconda3/envs
@@ -54,11 +54,11 @@ python run_get_site.py -c resources/checkpoint -m CASPET -n 5 -i resources/datas
 
 | Model                             | Description                                  | Download Link                           |
 | --------------------------------- | -------------------------------------------- | --------------------------------------- |
-| CASPET_model_1                    | Model related to thermostability (dataset1)  | https://zenodo.org/api/records/17851145 |
-| CASPET_model_2<br />(Recommended) | Model related to thermostability (dataset2) | https://zenodo.org/api/records/17851145 |
-| CASPET_model_3                    | Model related to thermostability (dataset3) | https://zenodo.org/api/records/17851145 |
-| CASPET_model_4                    | Model related to thermostability (dataset4) | https://zenodo.org/api/records/17851145 |
-| CASPEA_model                      | Model related to pH tolerance                | https://zenodo.org/api/records/17851145 |
+| CASPET_model_1                    | Model related to thermostability (dataset1)  |Waiting for update |
+| CASPET_model_2<br />(Recommended) | Model related to thermostability (dataset2) |https://zenodo.org/records/17982688 |
+| CASPET_model_3                    | Model related to thermostability (dataset3) |Waiting for update |
+| CASPET_model_4                    | Model related to thermostability (dataset4) |Waiting for update |
+| CASPEA_model                      | Model related to pH tolerance                |Waiting for update|
 
 ### Predict the most suitable amino acids
 
@@ -66,12 +66,12 @@ You can also predict the most suitable amino acids based on the current microenv
 
 Firstly, get the microenvironment, the data_type is 'pred', and you can get the pqr_site_file by locating critical residues or generating according to your knowledge.
 
-The examples (point_cloud_for_test.tar.gz) could be downloaded from https://zenodo.org/api/records/17851145.
+The examples (point_cloud_for_test.tar.gz) could be downloaded from https://zenodo.org/records/17982688.
 
 ```
 python run_generate_point_cloud.py -i resources/dataset/data_for_Micro_Env/pred/pqr -j resources/dataset/data_for_Micro_Env/pred/pqr_site.json -o resources/dataset/data_for_APCNet
 ```
-Sencondly, predict the most suitable amino acids based on the current microenvironment. Example (micro_env_for_predict.tar.gz)could be downloaded from https://zenodo.org/api/records/17851145.
+Sencondly, predict the most suitable amino acids based on the current microenvironment. Example (micro_env_for_predict.tar.gz)could be downloaded from https://zenodo.org/records/17982688.
 
 ```
 python run_predict_res.py -c resources/checkpoint -m APCNetT -i resources/dataset/data_for_APCNet/pred -o output/aa_pred.csv
@@ -81,9 +81,9 @@ python run_predict_res.py -c resources/checkpoint -m APCNetT -i resources/datase
 
 | Model    | Description                    | Download Link                           |
 | -------- | ------------------------------ | --------------------------------------- |
-| APCNetTH | APCNet for thermostability     | https://zenodo.org/api/records/17851145 |
-| APCNetAC | APCNet for acid-tolerance     | https://zenodo.org/api/records/17851145 |
-| APCNetAL | APCNet for alkaline-tolerance | https://zenodo.org/api/records/17851145 |
+| APCNetT | APCNet for thermostability     |https://zenodo.org/records/17982688 |
+| APCNetAC | APCNet for acid-tolerance     |Waiting for update|
+| APCNetAL | APCNet for alkaline-tolerance |Waiting for update|
 
 ## Details for use
 
@@ -105,7 +105,7 @@ See at Quick Start
 
 Get pdb files from AlphaFold (https://alphafold.com/), Get the microenvironment, the data_type is 'train/val', and you can get the pqr_site_file by locating critical residues or generating according to your knowledge.
 
-The examples (point_cloud_for_train.tar.gz) could be downloaded from https://zenodo.org/api/records/17851145.
+The examples (point_cloud_for_train.tar.gz) could be downloaded from https://zenodo.org/records/17982688.
 
 Before generating point cloud, we get pqr file from pdb file by PDB2PQR (https://pdb2pqr.readthedocs.io/en/latest/getting.html)
 
@@ -115,7 +115,7 @@ Waiting for update
 ```
 ### APCNet Training
 
-After getting the h5 in the last step, we can train APCNet here. The examples (data_for_APCNet.tar.gz) could be downloaded from https://zenodo.org/api/records/17851145.
+After getting the h5 in the last step, we can train APCNet here. The examples (data_for_APCNet.tar.gz) could be downloaded from https://zenodo.org/records/17982688.
 
 ```
 Waiting for update
