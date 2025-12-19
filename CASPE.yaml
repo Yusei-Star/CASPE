@@ -108,4 +108,4 @@ dependencies:
       - triton==3.0.0
       - typing-extensions==4.15.0
       - tzdata==2025.2
-prefix: /home/dengqf/anaconda3/envs/CASPE
+prefix: /home/xxx/anaconda3/envs/CASPE
