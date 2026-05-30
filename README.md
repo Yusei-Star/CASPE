@@ -13,18 +13,18 @@ The relationship between protein sequence and its properties remains unknown.We 
 **Option 1: Using conda (Recommended)**
 
 ```bash
-# Create and activate environment
 conda env create -f CASPE.yaml
 ```
 
-Option 2：Or you can download the environment tar (CASPE_env.tar.gz) and create the environment manually. (https://zenodo.org/records/17982688)
+**The command above is used to install the code runtime environment. It takes about 8 minutes (depending on network speed).
+
+**Option 2：Or you can download the environment tar (CASPE_env.tar.gz) and create the environment manually. (https://zenodo.org/records/17982688)**
 
 ```
 cd /anaconda3/envs
 mkdir CASPE
 tar -xzvf CASPE_env.tar.gz -C /anaconda3/envs/CASPE
 ```
-
 
 ### Dependencies
 
@@ -33,8 +33,8 @@ Core requirements:
 * Python 3.10
 * PyTorch 2.4.1
 * Biopython
-* [Other specific bioinformatics libraries]
-* Linux only (requires .so shared libraries)
+* Ubuntu 22.04.5 LTS
+* RTX 4090
 
 ### Using Pre-trained Models
 
@@ -46,44 +46,53 @@ bash
 
 CASPE can locate the critical amino acid sites in a protein sequence that are most relevant to thermostability or pH tolerance. When you use this function, you need to download the corresponding models and adjust the parameters in the code according to different requirements at the same time. CASPETs are for locating the critical residues about thermostability and CASPEA is for pH tolerance.
 
+**Download the weight file from the website and place it in the resources/checkpoint/ folder
+
 ```
-python run_get_site.py -c resources/checkpoint -m CASPET -n 5 -i resources/dataset/data_for_CAS/locate.txt -o output/test_CAS_value.json 
+python run_get_site.py -c resources/checkpoint -m CASPET -n 5 -i resources/dataset/data_for_CAS/locate.txt -o output/test_CAS_value.json
 ```
+
+**The command above is used to locate critical sites on three sequences. It takes about 10 seconds to run on an RTX4090
+
 #### **Checkpoints based on CAS**
 
 
-| Model                             | Description                                  | Download Link                           |
-| --------------------------------- | -------------------------------------------- | --------------------------------------- |
-| CASPET_model_1                    | Model related to thermostability (dataset1)  |Waiting for update |
-| CASPET_model_2<br />(Recommended) | Model related to thermostability (dataset2) |https://zenodo.org/records/17982688 |
-| CASPET_model_3                    | Model related to thermostability (dataset3) |Waiting for update |
-| CASPET_model_4                    | Model related to thermostability (dataset4) |Waiting for update |
-| CASPEA_model                      | Model related to pH tolerance                |Waiting for update|
+| Model                             | Description                                  | Download Link                       |
+| --------------------------------- | -------------------------------------------- | ----------------------------------- |
+| CASPET_model_1                    | Model related to thermostability (dataset1)  | Waiting for update                  |
+| CASPET_model_2<br />(Recommended) | Model related to thermostability (dataset2) | https://zenodo.org/records/17982688 |
+| CASPET_model_3                    | Model related to thermostability (dataset3) | Waiting for update                  |
+| CASPET_model_4                    | Model related to thermostability (dataset4) | Waiting for update                  |
+| CASPEA_model                      | Model related to pH tolerance                | Waiting for update                  |
 
 ### Predict the most suitable amino acids
 
-You can also predict the most suitable amino acids based on the current microenvironment.
+You can also predict the optimal amino acids based on the current microenvironment.
 
-Firstly, get the microenvironment, the data_type is 'pred', and you can get the pqr_site_file by locating critical residues or generating according to your knowledge.
-
-The examples (point_cloud_for_test.tar.gz) could be downloaded from https://zenodo.org/records/17982688.
+Firstly, you need to generate microenvironment data for the critical sites based on the sites information of sequence and the PQR file.
 
 ```
-python run_generate_point_cloud.py -i resources/dataset/data_for_Micro_Env/pred/pqr -j resources/dataset/data_for_Micro_Env/pred/pqr_site.json -o resources/dataset/data_for_APCNet
+python run_generate_point_cloud.py -i resources/dataset/data_for_Micro_Env/pred/pqr -j output/test_CAS_value.json -o resources/dataset/data_for_APCNet
 ```
-Sencondly, predict the most suitable amino acids based on the current microenvironment. Example (micro_env_for_predict.tar.gz)could be downloaded from https://zenodo.org/records/17982688.
+
+**The command above is used to generate 45 microenvironments , which takes about 3 seconds to run on a single RTX4090.
+
+Sencondly, predict the optimal amino acids based on the current microenvironment.
 
 ```
 python run_predict_res.py -c resources/checkpoint -m APCNetT -i resources/dataset/data_for_APCNet/pred -o output/aa_pred.csv
 ```
+
+**The command above is used to predict the optimal amino acids. It takes about 3 seconds to run on a single RTX4090.
+
 #### APCNet models
 
 
-| Model    | Description                    | Download Link                           |
-| -------- | ------------------------------ | --------------------------------------- |
-| APCNetT | APCNet for thermostability     |https://zenodo.org/records/17982688 |
-| APCNetAC | APCNet for acid-tolerance     |Waiting for update|
-| APCNetAL | APCNet for alkaline-tolerance |Waiting for update|
+| Model    | Description                    | Download Link                       |
+| -------- | ------------------------------ | ----------------------------------- |
+| APCNetT  | APCNet for thermostability     | https://zenodo.org/records/17982688 |
+| APCNetAC | APCNet for acid-tolerance     | Waiting for update                  |
+| APCNetAL | APCNet for alkaline-tolerance | Waiting for update                  |
 
 ## Details for use
 
@@ -95,8 +104,8 @@ We get the target sequences from dataset, and the sequence related to thermostab
 
 ```
 Waiting for update
-
 ```
+
 ### For locating critical residues
 
 See at Quick Start
@@ -111,8 +120,8 @@ Before generating point cloud, we get pqr file from pdb file by PDB2PQR (https:/
 
 ```
 Waiting for update
-
 ```
+
 ### APCNet Training
 
 After getting the h5 in the last step, we can train APCNet here. The examples (data_for_APCNet.tar.gz) could be downloaded from https://zenodo.org/records/17982688.
@@ -120,6 +129,7 @@ After getting the h5 in the last step, we can train APCNet here. The examples (d
 ```
 Waiting for update
 ```
+
 ## Citation
 
 If you find the models useful in your research, we ask that you cite the relevant paper:
@@ -134,6 +144,7 @@ If you find the models useful in your research, we ask that you cite the relevan
   journal={}
 }
 ```
+
 ## Acknowledgment
 
 * [facebookresearch/esm: Evolutionary Scale Modeling (esm): Pretrained language models for proteins](https://github.com/facebookresearch/esm)
