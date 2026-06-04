@@ -46,28 +46,42 @@ bash
 
 CASPE can locate the critical amino acid sites in a protein sequence that are most relevant to thermostability or pH tolerance. When you use this function, you need to download the corresponding models and adjust the parameters in the code according to different requirements at the same time. CASPETs are for locating the critical residues about thermostability and CASPEA is for pH tolerance.
 
-**Download the weight file from the website and place it in the resources/checkpoint/ folder
-
-```
-python run_get_site.py -c resources/checkpoint -m CASPET -n 5 -i resources/dataset/data_for_CAS/locate.txt -o output/test_CAS_value.json
-```
-
-**The command above is used to locate critical sites on three sequences. It takes about 10 seconds to run on an RTX4090
+**Download the weight file from the website, and extract it, place it in the "resources/checkpoints/" folder.
 
 #### **Checkpoints based on CAS**
 
 
-| Model                             | Description                                  | Download Link                       |
-| --------------------------------- | -------------------------------------------- | ----------------------------------- |
-| CASPET_model_1                    | Model related to thermostability (dataset1)  | Waiting for update                  |
-| CASPET_model_2<br />(Recommended) | Model related to thermostability (dataset2) | https://zenodo.org/records/17982688 |
-| CASPET_model_3                    | Model related to thermostability (dataset3) | Waiting for update                  |
-| CASPET_model_4                    | Model related to thermostability (dataset4) | Waiting for update                  |
-| CASPEA_model                      | Model related to pH tolerance                | Waiting for update                  |
+| Model file name                       | Description                                            | Download Link                           |
+| ------------------------------------- | ------------------------------------------------------ | --------------------------------------- |
+| CASPET_model_1.zip                    | CASPET-1: Model related to thermostability (dataset1) | [https://zenodo.org/records/20523796]() |
+| CASPET_model_2.zip<br />(Recommended) | CASPET-2: Model related to thermostability (dataset2) | [https://zenodo.org/records/20523796]() |
+| CASPET_model_3.zip                    | CASPET-3: Model related to thermostability (dataset3) | [https://zenodo.org/records/20523796]() |
+| CASPET_model_4.zip                    | CASPET-4: Model related to thermostability (dataset4) | [https://zenodo.org/records/20523796]() |
+| CASPEA_model.zip                      | CASPEA: Model related to pH tolerance                  | [https://zenodo.org/records/20523796]() |
 
-### Predict the most suitable amino acids
+**For example: Download the file "CASPET_model_1.zip" and extract it. Then, place the extracted files into folder "resources/checkpoints/CASPET-1"
 
-You can also predict the optimal amino acids based on the current microenvironment.
+├── CASPET-1
+│   ├── 20-25_50-55_70-80_transformer.txt
+│   └── best_checkpoint.pth
+├── CASPET-3
+│   ├── best_checkpoint.pth
+│   └── less_20_38-45_65-70_transformer_new.txt
+└── CASPET-4
+     ├── 26_45-50_60-65_transformer.txt
+     └── best_checkpoint.pth
+
+#### Locating critical residues
+
+```
+python run_get_site.py -c resources/checkpoint -m CASPET-2 -n 5 -i resources/dataset/data_for_CAS/locate.txt -o output/test_CAS_value.json
+```
+
+**The command above is used to locate critical sites on three sequences. It takes about 10 seconds to run on an rtx4090
+
+#### Predict the most optimal amino acids
+
+You can also predict the most optimal amino acids based on the current microenvironment.
 
 Firstly, you need to generate microenvironment data for the critical sites based on the sites information of sequence and the PQR file.
 
@@ -75,24 +89,63 @@ Firstly, you need to generate microenvironment data for the critical sites based
 python run_generate_point_cloud.py -i resources/dataset/data_for_Micro_Env/pred/pqr -j output/test_CAS_value.json -o resources/dataset/data_for_APCNet
 ```
 
-**The command above is used to generate 45 microenvironments , which takes about 3 seconds to run on a single RTX4090.
+**The command above is used to generate 45 microenvironment datas. It takes about 3 seconds to run on an rtx4090.
 
-Sencondly, predict the optimal amino acids based on the current microenvironment.
+Sencondly, predict the most optimal amino acids based on the current microenvironment.
 
 ```
 python run_predict_res.py -c resources/checkpoint -m APCNetT -i resources/dataset/data_for_APCNet/pred -o output/aa_pred.csv
 ```
 
-**The command above is used to predict the optimal amino acids. It takes about 3 seconds to run on a single RTX4090.
+**The command above is used to predict the most suitable amino acids. It takes about 3 seconds to run on an rtx4090.
 
 #### APCNet models
 
 
-| Model    | Description                    | Download Link                       |
-| -------- | ------------------------------ | ----------------------------------- |
-| APCNetT  | APCNet for thermostability     | https://zenodo.org/records/17982688 |
-| APCNetAC | APCNet for acid-tolerance     | Waiting for update                  |
-| APCNetAL | APCNet for alkaline-tolerance | Waiting for update                  |
+| Model file name | Description                               | Download Link                           |
+| --------------- | ----------------------------------------- | --------------------------------------- |
+| APCNetT.zip     | APCNetT: APCNet for thermostability      | [https://zenodo.org/records/20523796]() |
+| APCNetAA.zip    | APCNetAA: APCNet for acid-tolerance      | [https://zenodo.org/records/20523796]() |
+| APCNetAL.zip    | APCNetAL: APCNet for alkaline-tolerance | [https://zenodo.org/records/20523796]() |
+
+## Reproduction Guide for results in paper
+
+This section provides a step-by-step guide for reviewers to reproduce the initial experimental results and validate the global feasibility of the CASPE framework.
+
+### Fig.2 in mainbody
+
+Before running the reproduction script, please download the specific initial model (CASPET and APCNet-1st: [https://zenodo.org/records/20523796](https://))
+
+1、Note: Each sequence should be run four times to obtain four results based on the CASPET, and then all the results should be summarized.
+
+```
+python run_get_site.py -c resources/checkpoint -m CASPET-1 -n 5 -i resources/dataset/data_for_CAS/BG_EG_CBHI_seq.txt -o output/BG_EG_CBHI_CAS_value_1.json
+```
+
+
+
+2、Note: This dataset is specifically curated and filtered to adapt to the initial model architecture, with point cloud sizes strictly ranging from **512 to 1536**. The JSON files obtained in the previous step all need to be converted into micro-environments and placed in the same folder, or download from [https://zenodo.org/records/20523796]() (data_for_APCNet_BG_EG_CBHI.zip)
+
+```
+python run_generate_point_cloud.py -i resources/dataset/data_for_Micro_Env/BG_EG_CBHI -j output/BG_EG_CBHI_CAS_value_1.json -n 512 -x 1536 -o resources/dataset/data_for_APCNet_BG_EG_CBHI
+```
+
+
+
+3、Note: The original evaluation and baseline validation presented in the manuscript were executed based on the final optimized state of the first-stage training (`last_checkpoint`)
+
+**Please download APCNet-1st.zip([https://zenodo.org/records/20523796](https://)), extract it, and move it to "resources/checkpoints".
+
+├── APCNetT-1st
+     ├── args.txt
+     ├── best_checkpoint.pth
+     ├── last_checkpoint.pth
+     ├── log.txt
+     └── out.txt
+
+```
+python run_predict_res.py -c resources/checkpoint -m APCNetT-1st -w last -i resources/dataset/data_for_APCNet_BG_EG_CBHI/pred -o output/BG_EG_CBHI_pred_1st.csv
+```
 
 ## Details for use
 
@@ -104,6 +157,7 @@ We get the target sequences from dataset, and the sequence related to thermostab
 
 ```
 Waiting for update
+
 ```
 
 ### For locating critical residues
